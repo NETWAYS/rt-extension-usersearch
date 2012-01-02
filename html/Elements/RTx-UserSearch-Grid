@@ -7,8 +7,8 @@
 	<th class="collection-as-table"><&|/l&>total</&></th>
 </tr>
 % for my $user(@u) {
-% $i++;
 % if (exists($data->{$user->Name})) {
+% $i++;
 % my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
 	<tr class="<% $i%2 ? 'oddline' : 'evenline' %>">
 		<td><a href="<%$baseLink|n%>"><%$user->Name%></a></td>
