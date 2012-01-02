@@ -1,0 +1,55 @@
+<table class="queue-summary" width="100%" cellspacing="0" cellpadding="1">
+<tr>
+	<th class="collection-as-table">Users</th>
+% for my $status (@Statuses) {
+	<th class="collection-as-table"><%loc($status)%></th>
+% }
+	<th class="collection-as-table"><&|/l&>total</&></th>
+</tr>
+% for my $user(@u) {
+% $i++;
+% if (exists($data->{$user->Name})) {
+% my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
+	<tr class="<% $i%2 ? 'oddline' : 'evenline' %>">
+		<td><a href="<%$baseLink|n%>"><%$user->Name%></a></td>
+% my $rowsum = 0;
+% for my $status (@Statuses) {
+% if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
+% $rowsum += $data->{$user->Name}->{$status};
+% }
+		<td align="right">
+			<a href="<%$baseLink|n%> and Status='<%$status%>'">
+				<% $data->{$user->Name}->{$status} || '-' %>
+			</a>
+		</td>
+%}
+		<td align="right"><% $rowsum > 0 ? $rowsum : '-' %></td>
+	</tr>
+% }
+% }
+</table>
+
+<%init>
+
+	use RT::Report::Tickets;
+	my $report = RT::Report::Tickets->new( RT->SystemUser );
+	$Users->OrderBy( ALIAS => 'main', FIELD => 'Name', ORDER => 'ASC' );
+	my @u = @{ $Users->ItemsArrayRef };
+	my $query = join(' OR ',  map { "Owner = ".$_->Id } @u);
+	
+	my $data = {};
+	my $state = {};
+	my $i=0;
+	
+	$report->SetupGroupings( Query => $query, GroupBy => [qw(Status Owner)] );
+	
+	while(my $entry = $report->Next()) {
+		$data->{$entry->__Value('col2')}->{$entry->__Value('Status')} = $entry->__Value('Id');
+		$state->{$entry->__Value('Status')} = 1;
+	}
+	
+</%init>
+<%args>
+	$Users => undef
+	@Statuses => ()
+</%args>

@@ -1,0 +1,25 @@
+* Install as common (perl Makefile.pl ...)
+
+* Activate plugin
+
+Set(@Plugins,(qw(
+        RTx::UserSearch
+)));
+
+
+* Add Element to homepage component
+
+Set($HomepageComponents, [qw(
+	QuickCreate
+	Quicksearch
+	MyAdminQueues
+	MySupportQueues
+	MyReminders
+	RefreshHomepage
+	Dashboards
+	SavedSearches
+	RTx-UserSearch
+)]);
+
+* Restart RT and check you have the right 'ShowUserSearch'. Only
+with this right the box will be displayed
