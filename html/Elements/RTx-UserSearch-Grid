@@ -11,7 +11,7 @@
 % $i++;
 % my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
 	<tr class="<% $i%2 ? 'oddline' : 'evenline' %>">
-		<td><a href="<%$baseLink|n%>"><%$user->Name%></a></td>
+		<td><a href="<%$baseLink|n%><%$totalCond|n%>"><%$user->Name%></a></td>
 % my $rowsum = 0;
 % for my $status (@Statuses) {
 % if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
@@ -47,6 +47,7 @@
 		$data->{$entry->__Value('col2')}->{$entry->__Value('Status')} = $entry->__Value('Id');
 		$state->{$entry->__Value('Status')} = 1;
 	}
+	my $totalCond = ' AND ('. join(' OR ', map {"Status='$_'"} @Statuses). ')';
 	
 </%init>
 <%args>
