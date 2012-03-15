@@ -1,7 +1,10 @@
 package RTx::UserSearch;
 
 use strict;
-use version '1.0';
+use version;
+
+our $VERSION="1.0.0";
+
 use RT::System;
 use vars qw(
 	$RIGHTS
