@@ -6,24 +6,8 @@ use version;
 our $VERSION="1.0.0";
 
 use RT::System;
-use vars qw(
-	$RIGHTS
-	$RIGHTS_CATEGORIES
-	
-);
 
-# Secure our box for special users only
-$RIGHTS = {
-	'ShowUserSearch' => 'Show the usersearch box'
-};
-
-$RIGHTS_CATEGORIES = {
-	'ShowUserSearch' => 'Staff'
-};
-
-RT::System->AddRights(%{ $RIGHTS });
-RT::System->AddRightCategories(%{ $RIGHTS_CATEGORIES });
-
+RT::System->AddRight('Staff' => 'ShowUserSearch' => 'Show the usersearch box');
 
 1;
 =pod

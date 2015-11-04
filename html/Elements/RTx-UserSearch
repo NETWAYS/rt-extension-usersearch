@@ -1,5 +1,5 @@
 <&| /Widgets/TitleBox, title => loc('Usersearch') &>
-	<& RTx-UserSearch-Grid, Users => $Users, Statuses => \@statuses &>
+	<& RTx-UserSearch-Grid, Users => $Users, StatusList => \@StatusList &>
 </&>
 <%init>
 
@@ -9,7 +9,7 @@
 	
 	my $Users = RT::Users->new(RT->SystemUser);
 	$Users->LimitToPrivileged();
-	my @statuses = qw(new open stalled);
+	my @StatusList = qw(new open stalled);
 
 </%init>
 <%args>

@@ -1,7 +1,7 @@
 <table class="queue-summary" width="100%" cellspacing="0" cellpadding="1">
 <tr>
 	<th class="collection-as-table">Users</th>
-% for my $status (@Statuses) {
+% for my $status (@StatusList) {
 	<th class="collection-as-table"><%loc($status)%></th>
 % }
 	<th class="collection-as-table"><&|/l&>total</&></th>
@@ -13,7 +13,7 @@
 	<tr class="<% $i%2 ? 'oddline' : 'evenline' %>">
 		<td><a href="<%$baseLink|n%><%$totalCond|n%>"><%$user->Name%></a></td>
 % my $rowsum = 0;
-% for my $status (@Statuses) {
+% for my $status (@StatusList) {
 % if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
 % $rowsum += $data->{$user->Name}->{$status};
 % }
@@ -23,7 +23,11 @@
 			</a>
 		</td>
 %}
-		<td align="right"><% $rowsum > 0 ? $rowsum : '-' %></td>
+		<td align="right">
+			<a href="<%$baseLink|n%><%$totalCond|n%>">
+				<% $rowsum > 0 ? $rowsum : '-' %>
+			</a>
+		</td>
 	</tr>
 % }
 % }
@@ -35,22 +39,23 @@
 	my $report = RT::Report::Tickets->new( RT->SystemUser );
 	$Users->OrderBy( ALIAS => 'main', FIELD => 'Name', ORDER => 'ASC' );
 	my @u = @{ $Users->ItemsArrayRef };
+
 	my $query = join(' OR ',  map { "Owner = ".$_->Id } @u);
 	
 	my $data = {};
 	my $state = {};
 	my $i=0;
-	
+
 	$report->SetupGroupings( Query => $query, GroupBy => [qw(Status Owner)] );
-	
 	while(my $entry = $report->Next()) {
-		$data->{$entry->__Value('col2')}->{$entry->__Value('Status')} = $entry->__Value('Id');
+		# $m->out('<pre>' . Dumper($entry). '</pre>');
+		$data->{$entry->__Value('col1')}->{$entry->__Value('status')} = $entry->__Value('id');
 		$state->{$entry->__Value('Status')} = 1;
 	}
-	my $totalCond = ' AND ('. join(' OR ', map {"Status='$_'"} @Statuses). ')';
-	
+	my $totalCond = ' AND ('. join(' OR ', map {"Status='$_'"} @StatusList). ')';
+
 </%init>
 <%args>
 	$Users => undef
-	@Statuses => ()
+	@StatusList => ()
 </%args>
