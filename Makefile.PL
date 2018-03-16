@@ -1,9 +1,11 @@
-use strict;
 use inc::Module::Install;
 
-RTx('RT-Extension-UserSearch');
-author('Marius Hein <marius.hein@netways.de>');
-version('1.0');
-license('gpl');
+RTx     'RT-Extension-UserSearch';
+license 'gpl_2';
+repository 'https://github.com/NETWAYS/rt-extension-usersearch';
+readme_from 'lib/RT/Extension/UserSearch.pm';
 
-&WriteAll;
+requires_rt '4.2';
+
+sign;
+WriteAll;
