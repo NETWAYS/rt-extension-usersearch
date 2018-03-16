@@ -1,12 +1,12 @@
 <&| /Widgets/TitleBox, title => loc('Usersearch') &>
-	<& RTx-UserSearch-Grid, Users => $Users, StatusList => \@StatusList &>
+	<& RT-Extension-UserSearch-Grid, Users => $Users, StatusList => \@StatusList &>
 </&>
 <%init>
 
 	unless ( $session{'CurrentUser'}->HasRight( Object => RT->System, Right => 'ShowUserSearch' ) ) {
 		return;
 	}
-	
+
 	my $Users = RT::Users->new(RT->SystemUser);
 	$Users->LimitToPrivileged();
 	my @StatusList = qw(new open stalled);

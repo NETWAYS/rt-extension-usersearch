@@ -1,4 +1,4 @@
-package RTx::UserSearch;
+package RT::Extension::UserSearch;
 
 use strict;
 use version;
@@ -14,7 +14,7 @@ RT::System->AddRight('Staff' => 'ShowUserSearch' => 'Show the usersearch box');
 
 =head1 NAME
 
-RTx::UserSearch
+RT::Extension::UserSearch
 
 =head1 VERSION
 
