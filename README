@@ -1,0 +1,59 @@
+NAME
+    RT-Extension-UserSearch - Provides a portlet to list members of a
+    configurable group
+
+DESCRIPTION
+    Like QueueSearch this portlet lets you show - guess what - a UserSearch.
+    Only users with the permission ShowUserSearch are able to add this
+    portlet to their homepage.
+
+    It lists all members of a configurable group.
+
+RT VERSION
+    Works with RT 4.2
+
+INSTALLATION
+    perl Makefile.PL
+    make
+    make install
+        May need root permissions
+
+    Edit your /opt/rt4/etc/RT_SiteConfig.pm
+        Add this line:
+
+            Plugin('RT::Extension::UserSearch');
+
+    Clear your mason cache
+            rm -rf /opt/rt4/var/mason_data/obj
+
+    Restart your webserver
+
+CONFIGURATION
+    Add the extension to homepage components:
+
+        Set($HomepageComponents, [qw(
+            QuickCreate
+            Quicksearch
+            MyAdminQueues
+            MySupportQueues
+            MyReminders
+            RefreshHomepage
+            Dashboards
+            SavedSearches
+            RT-Extension-UserSearch
+        )]);
+
+AUTHOR
+    NETWAYS GmbH <lt>support@netways.de<gt>
+
+BUGS
+    All bugs should be reported on GitHub
+    <https://github.com/NETWAYS/rt-extension-usersearch>.
+
+LICENSE AND COPYRIGHT
+    This software is Copyright (c) 2018 by NETWAYS GmbH
+
+    This is free software, licensed under:
+
+      The GNU General Public License, Version 2, June 1991
+
