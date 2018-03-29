@@ -10,7 +10,7 @@ DESCRIPTION
     It lists all members of a configurable group.
 
 RT VERSION
-    Works with RT 4.2
+    Works with RT 4.4.2
 
 INSTALLATION
     perl Makefile.PL
@@ -29,20 +29,11 @@ INSTALLATION
     Restart your webserver
 
 CONFIGURATION
-    Add the extension to homepage components:
 
-        Set($HomepageComponents, [qw(
-            QuickCreate
-            Quicksearch
-            MyAdminQueues
-            MySupportQueues
-            MyReminders
-            QueueList
-            RefreshHomepage
-            Dashboards
-            SavedSearches
-            RT-Extension-UserSearch
-        )]);
+    Navigate into Admin - Global - Group Rights and select the group to modify.
+    Select the Rights for staff tab and tick Show the usersearch box.
+
+    Users need to edit their dashboard and add the RT-Extension-UserSearch droplet.
 
 AUTHOR
     NETWAYS GmbH <lt>support@netways.de<gt>
