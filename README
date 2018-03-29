@@ -37,6 +37,7 @@ CONFIGURATION
             MyAdminQueues
             MySupportQueues
             MyReminders
+            QueueList
             RefreshHomepage
             Dashboards
             SavedSearches

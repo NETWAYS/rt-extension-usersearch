@@ -65,6 +65,7 @@ Add the extension to homepage components:
         MySupportQueues
         MyReminders
         RefreshHomepage
+        QueueList
         Dashboards
         SavedSearches
         RT-Extension-UserSearch

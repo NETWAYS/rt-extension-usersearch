@@ -75,6 +75,7 @@ Add the extension to homepage components:
     	MyAdminQueues
     	MySupportQueues
     	MyReminders
+        QueueList
     	RefreshHomepage
     	Dashboards
     	SavedSearches
