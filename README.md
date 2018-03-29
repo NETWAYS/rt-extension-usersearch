@@ -67,17 +67,7 @@ Restart your webserver.
 
 ## Configuration
 
-Add the extension to homepage components:
+Navigate into `Admin` - `Global` - `Group Rights` and select the group to modify.
+Select the `Rights for staff` tab and tick `Show the usersearch box`.
 
-    Set($HomepageComponents, [qw(
-    	QuickCreate
-    	Quicksearch
-    	MyAdminQueues
-    	MySupportQueues
-    	MyReminders
-        QueueList
-    	RefreshHomepage
-    	Dashboards
-    	SavedSearches
-    	RT-Extension-UserSearch
-    )]);
+Users need to edit their dashboard and add the `RT-Extension-UserSearch` droplet.

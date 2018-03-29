@@ -9,6 +9,12 @@ use RT::System;
 
 RT::System->AddRight('Staff' => 'ShowUserSearch' => 'Show the usersearch box');
 
+# Automatically extend $HomepageComponents. Avoids the need to
+# maintain the component list when installing this extension.
+my @components = @{$RT::Config->Get('HomepageComponents')};
+push(@components, 'RT-Extension-UserSearch');
+$RT::Config->Set('HomepageComponents', \@components);
+
 1;
 =pod
 
@@ -26,7 +32,7 @@ It lists all members of a configurable group.
 
 =head1 RT VERSION
 
-Works with RT 4.2
+Works with RT 4.4.2
 
 =head1 INSTALLATION
 
@@ -56,20 +62,10 @@ Add this line:
 
 =head1 CONFIGURATION
 
-Add the extension to homepage components:
+Navigate into Admin - Global - Group Rights and select the group to modify.
+Select the Rights for staff tab and tick Show the usersearch box.
 
-    Set($HomepageComponents, [qw(
-        QuickCreate
-        Quicksearch
-        MyAdminQueues
-        MySupportQueues
-        MyReminders
-        RefreshHomepage
-        QueueList
-        Dashboards
-        SavedSearches
-        RT-Extension-UserSearch
-    )]);
+Users need to edit their dashboard and add the RT-Extension-UserSearch droplet.
 
 =head1 AUTHOR
 
