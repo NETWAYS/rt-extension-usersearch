@@ -11,11 +11,11 @@
 
 ## About
 
-Like QueueSearch this portlet lets you show - guess what - a UserSearch.
-Only users with the permission `ShowUserSearch` are able to add this
-portlet to their homepage.
+This portlet lists privileged users and their ticket count grouped by state.
+Only users with the permission `ShowUserSearch` can add this portlet
+to their homepage dashboard.
 
-It lists all members of a configurable group.
+![Screenshot](doc/screenshot/overview.png)
 
 ## License
 
@@ -30,7 +30,7 @@ You may also send us an email to [support@netways.de](mailto:support@netways.de)
 
 ## Requirements
 
-- RT 4.2
+- RT 4.4.2
 
 ## Installation
 
@@ -71,3 +71,5 @@ Navigate into `Admin` - `Global` - `Group Rights` and select the group to modify
 Select the `Rights for staff` tab and tick `Show the usersearch box`.
 
 Users need to edit their dashboard and add the `RT-Extension-UserSearch` droplet.
+
+![Screenshot](doc/screenshot/add-portlet.png)

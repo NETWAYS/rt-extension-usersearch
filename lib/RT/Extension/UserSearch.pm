@@ -24,9 +24,9 @@ RT-Extension-UserSearch - Provides a portlet to list members of a configurable g
 
 =head1 DESCRIPTION
 
-Like QueueSearch this portlet lets you show - guess what - a UserSearch.
-Only users with the permission C<ShowUserSearch> are able to add this
-portlet to their homepage.
+This portlet lists privileged users and their ticket count grouped by state.
+Only users with the permission `ShowUserSearch` can add this portlet
+to their homepage dashboard.
 
 It lists all members of a configurable group.
 

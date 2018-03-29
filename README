@@ -3,11 +3,9 @@ NAME
     configurable group
 
 DESCRIPTION
-    Like QueueSearch this portlet lets you show - guess what - a UserSearch.
-    Only users with the permission ShowUserSearch are able to add this
-    portlet to their homepage.
-
-    It lists all members of a configurable group.
+    This portlet lists privileged users and their ticket count grouped by state.
+    Only users with the permission `ShowUserSearch` can add this portlet
+    to their homepage dashboard.
 
 RT VERSION
     Works with RT 4.4.2
