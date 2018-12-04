@@ -67,8 +67,23 @@ Restart your webserver.
 
 ## Configuration
 
+By default, all privilegued users are shown. There is a known problem
+with users which don't own any tickets being hidden.
+
+If you want to show specific groups, you can configure an array of group names:
+
+```
+Set($UserSearch_Groups,
+[ "development" ]
+);
+```
+
+### Permissions
+
 Navigate into `Admin` - `Global` - `Group Rights` and select the group to modify.
 Select the `Rights for staff` tab and tick `Show the usersearch box`.
+
+### Dashboard
 
 Users need to edit their dashboard and add the `RT-Extension-UserSearch` droplet.
 

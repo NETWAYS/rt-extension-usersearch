@@ -3,13 +3,36 @@
 </&>
 <%init>
 
-	unless ( $session{'CurrentUser'}->HasRight( Object => RT->System, Right => 'ShowUserSearch' ) ) {
-		return;
-	}
+unless ($session{'CurrentUser'}->HasRight( Object => RT->System, Right => 'ShowUserSearch')) {
+  return;
+}
 
-	my $Users = RT::Users->new(RT->SystemUser);
-	$Users->LimitToPrivileged();
-	my @StatusList = qw(new open stalled);
+my @StatusList = qw(new open stalled);
+
+my $usc = RT->Config->Get('UserSearch_Groups');
+
+my $Users = RT::Users->new(RT->SystemUser);
+my $systemUser  = RT::User->new($RT::SystemUser);
+
+if ($usc) {
+  my $groups;
+
+  for my $userGroupName (@{$usc}) {
+    my $groupObj = new RT::Group($systemUser);
+    $groupObj->LoadUserDefinedGroup($userGroupName);
+
+    if (not $groupObj->Id) {
+      RT::Logger->crit("UserSearch configuration error: Group ". $userGroupName . " not found in RT.");
+      next;
+    }
+
+    push @{$groups}, $groupObj->Id;
+  }
+
+  $Users->WhoBelongToGroups(Groups => $groups, IncludeSubgroupMembers => 1, IncludeUnprivileged => 1);
+} else {
+  $Users->LimitToPrivileged();
+}
 
 </%init>
 <%args>
