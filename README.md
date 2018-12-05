@@ -74,9 +74,11 @@ If you want to show specific groups, you can configure an array of group names:
 
 ```
 Set($UserSearch_Groups,
-[ "development" ]
+[ "netways" ]
 );
 ```
+
+This also works for sub group members included in the configured group.
 
 ### Permissions
 
