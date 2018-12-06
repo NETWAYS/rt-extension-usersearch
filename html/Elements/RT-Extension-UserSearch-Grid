@@ -7,29 +7,28 @@
 	<th class="collection-as-table"><&|/l&>total</&></th>
 </tr>
 % for my $user(@u) {
-% if (exists($data->{$user->Name})) {
-% $i++;
-% my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
+%   #RT::Logger->debug("UserSearch: Processing user ". $user->Name);
+%   $i++;
+%   my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
 	<tr class="<% $i%2 ? 'oddline' : 'evenline' %>">
 		<td><a href="<%$baseLink|n%><%$totalCond|n%>"><%$user->Name%></a></td>
-% my $rowsum = 0;
-% for my $status (@StatusList) {
-% if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
-% $rowsum += $data->{$user->Name}->{$status};
-% }
+%   my $rowsum = 0;
+%   for my $status (@StatusList) {
+%     if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
+%       $rowsum += $data->{$user->Name}->{$status};
+%     }
 		<td align="right">
 			<a href="<%$baseLink|n%> and Status='<%$status%>'">
 				<% $data->{$user->Name}->{$status} || '-' %>
 			</a>
 		</td>
-%}
+%   }
 		<td align="right">
 			<a href="<%$baseLink|n%><%$totalCond|n%>">
 				<% $rowsum > 0 ? $rowsum : '-' %>
 			</a>
 		</td>
 	</tr>
-% }
 % }
 </table>
 
@@ -47,8 +46,13 @@
 	my $i=0;
 
 	$report->SetupGroupings( Query => $query, GroupBy => [qw(Status Owner)] );
+
+	#RT::Logger->debug("UserSearch report results: " . Dumper($report));
+	#RT::Logger->debug("UserSearch users: ". join(' ',  map { "Name: ".$_->Name } @u));
+
 	while(my $entry = $report->Next()) {
-		# $m->out('<pre>' . Dumper($entry). '</pre>');
+		#RT::Logger->debug("UserSearch: " . Dumper($entry));
+		#$m->out('<pre>' . Dumper($entry). '</pre>');
 		$data->{$entry->__Value('col1')}->{$entry->__Value('status')} = $entry->__Value('id');
 		$state->{$entry->__Value('Status')} = 1;
 	}

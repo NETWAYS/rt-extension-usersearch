@@ -15,9 +15,9 @@ my $Users = RT::Users->new(RT->SystemUser);
 my $systemUser  = RT::User->new($RT::SystemUser);
 
 if ($usc) {
-  my $groups;
-
   for my $userGroupName (@{$usc}) {
+    my $groups = ();
+
     my $groupObj = new RT::Group($systemUser);
     $groupObj->LoadUserDefinedGroup($userGroupName);
 
@@ -25,14 +25,18 @@ if ($usc) {
       RT::Logger->crit("UserSearch configuration error: Group ". $userGroupName . " not found in RT.");
       next;
     }
-
+    # Do this for any configured group
     push @{$groups}, $groupObj->Id;
+    $Users->WhoBelongToGroups(Groups => $groups, IncludeSubgroupMembers => 1, IncludeUnprivileged => 1);
   }
 
-  $Users->WhoBelongToGroups(Groups => $groups, IncludeSubgroupMembers => 1, IncludeUnprivileged => 1);
 } else {
   $Users->LimitToPrivileged();
 }
+
+#for my $u (@{ $Users->ItemsArrayRef }) {
+#  RT::Logger->debug("UserSearch user: ". $u->Name);
+#}
 
 </%init>
 <%args>
