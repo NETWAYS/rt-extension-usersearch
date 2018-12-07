@@ -3,7 +3,7 @@ package RT::Extension::UserSearch;
 use strict;
 use version;
 
-our $VERSION='2.0.0';
+our $VERSION='2.1.0';
 
 use RT::System;
 
