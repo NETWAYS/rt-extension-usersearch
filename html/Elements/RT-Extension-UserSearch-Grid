@@ -55,7 +55,7 @@
 % $previousHeader = $user->FirstCustomFieldValue($cfId);
 % }
 %# Add the last group sum row
-% if ($groupPresent) {
+% if ($groupPresent && $previousHeader) {
     <tr class="evenline usersearch-sum-row">
         <td>&nbsp;</td>
 %       my $groupRowSum = 0;
@@ -79,23 +79,30 @@
         my $cf = RT::CustomField->new($RT::SystemUser);
 
 
-        if ($loadCf =~m /\d+/) {
+        if ($loadCf =~m/\d+/) {
             $cf->Load($loadCf);
         } else {
             $cf->LoadByName(Name => $loadCf, LookupType => 'RT::User');
         }
 
-        unless ($cf->IsSelectionType()) {
-            usersearch_error('CustomField ' . $loadCf . ' is not a SelectionType');
+        unless ($cf->Id) {
+            $m->out('Could not load CustomField "' . $loadCf . '"');
+            return;
         }
 
         unless ($cf->LookupType eq 'RT::User') {
-            usersearch_error('CustomField ' . $loadCf . ' is not a RT::User field');
+            $m->out('CustomField "' . $loadCf . '" is not a RT::User field');
+            return;
+        }
+
+        unless ($cf->IsSelectionType()) {
+            $m->out('CustomField "' . $loadCf . '" is not a SelectionType');
+            return;
         }
 
         if ($cf->Id) {
             my $values = $cf->Values();
-            my $valuesOrder = {'' => 0};
+            my $valuesOrder = {'' => -999}; # Default (empty) should be the first entry
 
             $cfId = $cf->Id;
 
@@ -106,8 +113,6 @@
             @u = sort {
                 $valuesOrder->{$a->FirstCustomFieldValue // ''} <=> $valuesOrder->{$b->FirstCustomFieldValue // ''}
             } @u;
-        } else {
-            usersearch_error('Could not load CustomField: ' . $loadCf);
         }
     }
 
@@ -135,13 +140,6 @@
 	my $totalCond = ' AND ('. join(' OR ', map {"Status='$_'"} @StatusList). ')';
 
 </%init>
-<%once>
-    sub usersearch_error {
-        my $msg = shift;
-        $m->out($msg);
-        $m->abort();
-    }
-</%once>
 <%args>
 	$Users => undef
 	@StatusList => ()
