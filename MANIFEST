@@ -1,3 +1,10 @@
+.github/ISSUE_TEMPLATE.md
+.mailmap
+AUTHORS
+doc/screenshot/add-portlet.png
+doc/screenshot/overview-group.png
+doc/screenshot/overview.png
+doc/screenshot/values-sortorder.png
 html/Elements/RT-Extension-UserSearch
 html/Elements/RT-Extension-UserSearch-Grid
 inc/Module/Install.pm
@@ -19,3 +26,4 @@ MANIFEST			This list of files
 META.yml
 README
 README.md
+RELEASE.md
