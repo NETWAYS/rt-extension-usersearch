@@ -1,12 +1,34 @@
+% my $previousHeader = '';
+% my $groupPresent = 0;
+% my $cfGroupSum = {new => 0, open => 0, stalled => 0};
 <table class="queue-summary" width="100%" cellspacing="0" cellpadding="1">
 <tr>
-	<th class="collection-as-table">Users</th>
+	<th class="collection-as-table">UserSearch (<% $Users->Count() %> Users)</th>
 % for my $status (@StatusList) {
 	<th class="collection-as-table"><%loc($status)%></th>
 % }
 	<th class="collection-as-table"><&|/l&>total</&></th>
 </tr>
 % for my $user(@u) {
+
+%   if ($loadCf && $user->FirstCustomFieldValue($cfId) ne $previousHeader // '') {
+%       if ($groupPresent) {
+            <tr class="evenline usersearch-sum-row">
+                <td>&nbsp;</td>
+%               my $groupRowSum = 0;
+%               for my $status (@StatusList) {
+                    <td align="right"><a><% $cfGroupSum->{$status} %></a></td>
+%                   $groupRowSum += $cfGroupSum->{$status};
+%               }
+                    <td align="right"><a><% $groupRowSum %></a></td>
+            </tr>
+%       }
+%       $groupPresent = 1;
+        <tr>
+            <th colspan="5" class="collection-as-table"><% $user->FirstCustomFieldValue($cfId) %></td>
+        </tr>
+%       $cfGroupSum = {new => 0, open => 0, stalled => 0};
+%   }
 %   #RT::Logger->debug("UserSearch: Processing user ". $user->Name);
 %   $i++;
 %   my $baseLink = RT->Config->Get('WebPath'). "/Search/Results.html?Query=Owner='". $user->Name. "'";
@@ -15,6 +37,7 @@
 %   my $rowsum = 0;
 %   for my $status (@StatusList) {
 %     if ($data->{$user->Name}->{$status} && $data->{$user->Name}->{$status} > 0) {
+%       $cfGroupSum->{$status} += $data->{$user->Name}->{$status};
 %       $rowsum += $data->{$user->Name}->{$status};
 %     }
 		<td align="right">
@@ -29,15 +52,68 @@
 			</a>
 		</td>
 	</tr>
+% $previousHeader = $user->FirstCustomFieldValue($cfId);
+% }
+%# Add the last group sum row
+% if ($groupPresent) {
+    <tr class="evenline usersearch-sum-row">
+        <td>&nbsp;</td>
+%       my $groupRowSum = 0;
+%       for my $status (@StatusList) {
+            <td align="right"><a><% $cfGroupSum->{$status} %></a></td>
+%           $groupRowSum += $cfGroupSum->{$status};
+%       }
+        <td align="right"><a><% $groupRowSum %></a></td>
+     </tr>
 % }
 </table>
-
 <%init>
+    my $loadCf = RT->Config->Get('UserSearch_GroupByCustomField') // '';
+    my $cfId = undef;
+
+    $Users->OrderBy(ALIAS => 'main', FIELD => 'Name', ORDER => 'ASC');
+
+    my @u = @{ $Users->ItemsArrayRef };
+
+    if ($loadCf) {
+        my $cf = RT::CustomField->new($RT::SystemUser);
+
+
+        if ($loadCf =~m /\d+/) {
+            $cf->Load($loadCf);
+        } else {
+            $cf->LoadByName(Name => $loadCf, LookupType => 'RT::User');
+        }
+
+        unless ($cf->IsSelectionType()) {
+            usersearch_error('CustomField ' . $loadCf . ' is not a SelectionType');
+        }
+
+        unless ($cf->LookupType eq 'RT::User') {
+            usersearch_error('CustomField ' . $loadCf . ' is not a RT::User field');
+        }
+
+        if ($cf->Id) {
+            my $values = $cf->Values();
+            my $valuesOrder = {'' => 0};
+
+            $cfId = $cf->Id;
+
+            while (my $value = $values->Next()) {
+                $valuesOrder->{$value->Name} = $value->SortOrder;
+            }
+
+            @u = sort {
+                $valuesOrder->{$a->FirstCustomFieldValue // ''} <=> $valuesOrder->{$b->FirstCustomFieldValue // ''}
+            } @u;
+        } else {
+            usersearch_error('Could not load CustomField: ' . $loadCf);
+        }
+    }
 
 	use RT::Report::Tickets;
 	my $report = RT::Report::Tickets->new( RT->SystemUser );
-	$Users->OrderBy( ALIAS => 'main', FIELD => 'Name', ORDER => 'ASC' );
-	my @u = @{ $Users->ItemsArrayRef };
+
 
 	my $query = join(' OR ',  map { "Owner = ".$_->Id } @u);
 	
@@ -59,6 +135,13 @@
 	my $totalCond = ' AND ('. join(' OR ', map {"Status='$_'"} @StatusList). ')';
 
 </%init>
+<%once>
+    sub usersearch_error {
+        my $msg = shift;
+        $m->out($msg);
+        $m->abort();
+    }
+</%once>
 <%args>
 	$Users => undef
 	@StatusList => ()

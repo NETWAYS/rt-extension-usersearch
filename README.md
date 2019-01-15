@@ -72,11 +72,31 @@ with users which don't own any tickets being hidden.
 
 If you want to show specific groups, you can configure an array of group names:
 
-```
+```perl
 Set($UserSearch_Groups,
-[ "netways" ]
+[ 'netways' ]
 );
 ```
+
+### Group by User-CustomField
+
+If you want to group results by a CustomField which applies to users, you can use:
+
+```perl
+Set($UserSearch_GroupByCustomField, 'Department');
+```
+
+If this is a ```SelectionType``` CustomField a summary row is appended after the group. To apply a different style
+to the summary row you can style a class (```usersearch-summary-row```) in your RT Theme:
+
+```css
+table.queue-summary tr.usersearch-sum-row td {
+  background-color: rgba(255,170,68,0.1);
+  color: black;
+  padding-top: 0.5em;
+}
+```
+
 
 This also works for sub group members included in the configured group.
 
