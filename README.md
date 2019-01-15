@@ -84,6 +84,8 @@ Set($UserSearch_Groups,
 );
 ```
 
+This also works for sub group members included in the configured group.
+
 ### Group by User-CustomField
 
 If you want to group results by a CustomField which applies to users, you can use:
@@ -95,6 +97,13 @@ Set($UserSearch_GroupByCustomField, 'Department');
 If this is a ```SelectionType``` CustomField a summary row is appended after the group. To apply a different style
 to the summary row you can style a class (```usersearch-summary-row```) in your RT Theme:
 
+You can control the order of groups by defining a SortOrder for the CustomFieldValues:
+
+![Screenshot](doc/screenshot/values-sortorder.png)
+ 
+The group-summary-row has its own class for styling. You can override the class ```tr.usersearch-sum-row``` in
+your RT theme:
+
 ```css
 table.queue-summary tr.usersearch-sum-row td {
   background-color: rgba(255,170,68,0.1);
@@ -102,9 +111,6 @@ table.queue-summary tr.usersearch-sum-row td {
   padding-top: 0.5em;
 }
 ```
-
-
-This also works for sub group members included in the configured group.
 
 ### Permissions
 
