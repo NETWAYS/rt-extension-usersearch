@@ -11,7 +11,7 @@
 </tr>
 % for my $user(@u) {
 
-%   if ($loadCf && $user->FirstCustomFieldValue($cfId) ne $previousHeader // '') {
+%   if ($loadCf && (($user->FirstCustomFieldValue($cfId) && !$previousHeader) || ($previousHeader && $user->FirstCustomFieldValue($cfId) ne $previousHeader))) {
 %       if ($groupPresent) {
             <tr class="evenline usersearch-sum-row">
                 <td>&nbsp;</td>
