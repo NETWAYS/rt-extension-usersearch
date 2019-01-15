@@ -15,7 +15,13 @@ This portlet lists privileged users and their ticket count grouped by state.
 Only users with the permission `ShowUserSearch` can add this portlet
 to their homepage dashboard.
 
+***Using default mode***
+
 ![Screenshot](doc/screenshot/overview.png)
+
+***Group by CustomField***
+
+![Screenshot](doc/screenshot/overview-group.png)
 
 ## License
 
