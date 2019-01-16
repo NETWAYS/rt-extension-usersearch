@@ -1,5 +1,5 @@
 <&| /Widgets/TitleBox, title => loc('Usersearch') &>
-	<& RT-Extension-UserSearch-Grid, Users => $Users, StatusList => \@StatusList &>
+	<& RT-Extension-UserSearch-Grid, Users => $Users, StatusList => \@StatusList, Groups => $usc &>
 </&>
 <%init>
 

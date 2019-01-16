@@ -3,7 +3,14 @@
 % my $cfGroupSum = {new => 0, open => 0, stalled => 0};
 <table class="queue-summary" width="100%" cellspacing="0" cellpadding="1">
 <tr>
-	<th class="collection-as-table">UserSearch (<% $Users->Count() %> Users)</th>
+	<th class="collection-as-table">
+	    <% $Users->Count() %>
+%       if ($Groups && ref $Groups eq 'ARRAY') {
+            users in <% join(', ', @{ $Groups}) %>
+%       } else {
+            privileged users
+%       }
+    </th>
 % for my $status (@StatusList) {
 	<th class="collection-as-table"><%loc($status)%></th>
 % }
@@ -142,5 +149,6 @@
 </%init>
 <%args>
 	$Users => undef
+	$Groups => undef
 	@StatusList => ()
 </%args>
