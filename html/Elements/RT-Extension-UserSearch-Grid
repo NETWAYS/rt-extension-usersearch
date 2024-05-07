@@ -118,8 +118,9 @@
             }
 
             @u = sort {
-                $valuesOrder->{$a->FirstCustomFieldValue // ''} <=> $valuesOrder->{$b->FirstCustomFieldValue // ''}
+                $valuesOrder->{$a->FirstCustomFieldValue($cfId) // ''} <=> $valuesOrder->{$b->FirstCustomFieldValue($cfId) // ''}
             } @u;
+
         }
     }
 
